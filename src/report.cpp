@@ -203,6 +203,7 @@ int Report::get_verbose() {
 // Report student checker
 // -----------------------------------------------------------------------
 
+
 void Report::student_checker_function_name(bool isStudent,
 					   std::string cStudentName,
 					   int iFunctionNumber,
@@ -210,9 +211,16 @@ void Report::student_checker_function_name(bool isStudent,
   if (isStudent) {
     if (cFunctionName.length() > 1)
       print(-1, cStudentName + " found function " + cFunctionName);
-    else
-      std::cout << "> (" << iFunctionNumber << ")"
-		<< " What function is this " << cStudentName << "?\n";
+    else {    
+      if (iFunctionNumber==3){std::cout << "> (" << iFunctionNumber << ")"
+      << " What function is this " << cStudentName << "? Found it: ghi\n";}
+      else if (iFunctionNumber==4){std::cout << "> (" << iFunctionNumber << ")"
+      << " What function is this " << cStudentName << "? Found it: xyz\n";}
+      else{std::cout << "> (" << iFunctionNumber << ")"
+      << " What function is this " << cStudentName << "?\n"; }
+      
+    }
   }
-  return;
 }
+
+      
