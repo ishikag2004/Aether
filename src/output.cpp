@@ -200,6 +200,30 @@ int output(const Neutrals &neutrals,
                                                     grid.bfield_vcgc[2]);
       }
 
+      if (type_output == "bfield") {
+        AllOutputContainers[iOutput].store_variable("mlat",
+                                                    "Magnetic Latitude",
+                                                    "degrees",
+                                                    grid.magLat_scgc * cRtoD);
+        AllOutputContainers[iOutput].store_variable("mlon",
+                                                    "Magnetic Longitude",
+                                                    "degrees",
+                                                    grid.magLon_scgc * cRtoD);
+        AllOutputContainers[iOutput].store_variable("mlt",
+                                                    "Magnetic Local Time",
+                                                    "hours",
+                                                    grid.magLocalTime_scgc);
+        AllOutputContainers[iOutput].store_variable("Beast",
+                                                    "nT",
+                                                    grid.bfield_vcgc[0]);
+        AllOutputContainers[iOutput].store_variable("Bnorth",
+                                                    "nT",
+                                                    grid.bfield_vcgc[1]);
+        AllOutputContainers[iOutput].store_variable("Bvertical",
+                                                    "nT",
+                                                    grid.bfield_vcgc[2]);
+      }
+
       // ------------------------------------------------------------
       // Set output file names
 
@@ -221,12 +245,14 @@ int output(const Neutrals &neutrals,
         filename = "3DCOR_";
 
       filename = filename + time.get_YMD_HMS();
-
+    
       if (nMembers > 1)
         filename = filename + "_" + cMember;
 
       if (nGrids > 1)
         filename = filename + "_" + cGrid;
+
+      
 
       report.print(0, "Writing file : " + filename);
       AllOutputContainers[iOutput].set_filename(filename);
