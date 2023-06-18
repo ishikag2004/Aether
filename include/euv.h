@@ -74,6 +74,14 @@ public:
   /// EUVAC model linear coefficients (2):
   std::vector<float> euvac_afac;
 
+    /// HFG model linear coefficients (1):
+  std::vector<float> solomon_hfg_c1;
+  /// HFG model linear coefficients (2):
+  std::vector<float> solomon_hfg_c2;
+    /// HFG model linear coefficients (3):
+  std::vector<float> solomon_hfg_fref;
+  
+
   // --------------------------------------------------------------------
   // Functions:
 
@@ -91,6 +99,14 @@ public:
      \param report allow reporting to occur
    **/
   int euvac(Times time, Indices indices, Report &report);
+
+ /**********************************************************************
+     \brief Compute the EUV spectrum given F107 and F107a
+     \param time The times within the model (dt is needed)
+     \param indices Need the F107 and F107a
+     \param report allow reporting to occur
+   **/
+  int solomon_hfg(Times time, Indices indices, Report &report);
 
   /**********************************************************************
      \brief Scale the EUV spectrum given the star - planet distance

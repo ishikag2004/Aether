@@ -46,6 +46,12 @@ Euv::Euv(Inputs args, Report report) {
       IsOk = slot_euv("F74113", "", euvac_f74113, report);
       IsOk = slot_euv("AFAC", "", euvac_afac, report);
     }
+    
+    if (args.get_euv_model() == "solomon_hfg") {
+      IsOk = slot_euv("HFG c1", "", solomon_hfg_c1, report);
+      IsOk = slot_euv("HFG c2", "", solomon_hfg_c2, report);
+      IsOk = slot_euv("HFG fref", "", solomon_hfg_fref, report);
+    }
   }
 
   IsOk = sync_across_all_procs(IsOk);
@@ -292,7 +298,8 @@ int Euv::euvac(Times time,
     if (slope < 0.8)
       slope = 0.8;
 
-    wavelengths_intensity_1au[iWave] = euvac_f74113[iWave] * slope * pcm2topm2;
+    wavelengths_intensity_1au[iWave] = euvac_f74113[iWave] * slope * pcm2topm2; 
+    
   }
 
   if (report.test_verbose(7)) {
@@ -307,11 +314,56 @@ int Euv::euvac(Times time,
                 << wavelengths_intensity_1au[iWave] << "\n";
     }
   }
-
+  
   report.exit(function);
   return iErr;
 }
 
+// --------------------------------------------------------------------------
+// Calculate HFG
+// --------------------------------------------------------------------------
+
+int Euv::solomon_hfg(Times time,
+               Indices indices,
+               Report &report) {
+
+  int iErr = 0;
+  precision_t r1;
+  precision_t r2;
+
+  std::string function = "Euv::solomon_hfg";
+  static int iFunction = -1;
+  report.enter(function, iFunction);
+    
+
+  precision_t f107 = indices.get_f107(time.get_current());
+  precision_t f107a = indices.get_f107a(time.get_current());
+
+
+  
+  for (int iWave = 0; iWave < nWavelengths; iWave++) {
+    r1 = 0.0138 * (f107 - 71.5) + 0.005 * (f107 - f107a + 3.9);
+    r2 = 0.5943 * (f107 - 71.5) + 0.381 * (f107 - f107a + 3.9);
+    
+    wavelengths_intensity_1au[iWave] = (solomon_hfg_fref[iWave] + (r1 * solomon_hfg_c1[iWave]) + (r2 * solomon_hfg_c2[iWave])) * pcm2topm2; 
+  
+  }
+
+  if (report.test_verbose(7)) {
+    std::cout << "HFG output : "
+              << f107 << " " << f107a << "\n";
+
+    for (int iWave = 0; iWave < nWavelengths; iWave++) {
+      std::cout << "     " << iWave << " "
+                << wavelengths_short[iWave] << " "
+                << wavelengths_long[iWave] << " "
+                << wavelengths_intensity_1au[iWave] << "\n";
+    }
+  }
+
+  report.exit(function);
+  return iErr;
+}
 
 // --------------------------------------------------------------------------
 // check to see if class is ok
