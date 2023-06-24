@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
-
+set (CMAKE_CXX_STANDARD 11)
+set(MPI_CXX_COMPILER "/opt/homebrew/Cellar/mpich/4.1.1_1/bin/mpicxx")
+set(MPI_CXX_INCLUDE_PATH "/opt/homebrew/Cellar/mpich/4.1.1_1/include")
 project(Aether LANGUAGES CXX
                VERSION   2021.0)
 

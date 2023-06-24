@@ -74,11 +74,11 @@ public:
   /// EUVAC model linear coefficients (2):
   std::vector<float> euvac_afac;
 
-    /// HFG model linear coefficients (1):
+  /// HFG model linear coefficients (1):
   std::vector<float> solomon_hfg_c1;
   /// HFG model linear coefficients (2):
   std::vector<float> solomon_hfg_c2;
-    /// HFG model linear coefficients (3):
+  /// HFG model linear coefficients (3):
   std::vector<float> solomon_hfg_fref;
   
 
